@@ -1,9 +1,9 @@
-#!/bin/bash -x 
+#!/bin/bash -x
 
 echo "Welcome"
 
 #CONSTANT INITIALIZED
-NUMBER_OF_COINS=2
+NUMBER_OF_COINS=3
 
 #TAKE USER INPUT
 read -p "Enter the limit of number of times coin flips:" limit
