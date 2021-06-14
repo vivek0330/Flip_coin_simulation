@@ -1,35 +1,39 @@
-#!/bin/bash -x
+#!/bin/bash -x 
 
 echo "Welcome"
 
-#VARIABLE INITIALIZED
-numberOfTimesHead=0
-numberOfTimesTail=0
+#CONSTANT INITIALIZED
+NUMBER_OF_COINS=2
 
 #TAKE USER INPUT
 read -p "Enter the limit of number of times coin flips:" limit
 
-#STORE VALUES IN THE DICTIONARY
+#STORE VALUES AND INDEX IN THE DICTIONARY
 declare -A dict 
 for((i=1; i<=limit; i++))
 do
-	if [ $(( RANDOM%2 )) -eq 1 ]
-	then
-		dict[$i]=H
-		(( numberOfTimesHead++ ))
-	else
-		dict[$i]=T
-		(( numberOfTimesTail++ ))
-	fi
+	for((j=1; j<=NUMBER_OF_COINS; j++))
+	do
+		random=$(( RANDOM%2 ))
+		if [ $random -eq 1 ]
+		then
+			sideOfCoin+=H
+		else
+			sideOfCoin+=T
+		fi
+	done
+	(( dict[$sideOfCoin]++ ))
+	sideOfCoin=""
 done
 
-#DISPLAY VALUES IN THE DICTIONARY
+#DISPLAY VALUES AND INDEX IN THE DICTIONARY
 echo "values in the dictionary : ${dict[@]}"
+echo "indexes in the dictionary : ${!dict[@]}"
 
-#CALCULATE PERCENTAGE OF HEAD AND TAIL
-headPercent=`awk 'BEGIN{printf("%0.2f" ,('$numberOfTimesHead'*100) / '$limit')}'`
-tailPercent=`awk 'BEGIN{printf("%0.2f" ,('$numberOfTimesTail'*100) / '$limit')}'`
-
-#DISPLAY PERCENTAGE OF HEAD AND TAIL
-echo "head percent = $headPercent %"
-echo "tail percent = $tailPercent %"
+#DISPLAY PERCENTAGE OF COMBINATIONS IN DICTIONARY
+echo "Percentage of head-tail combinations in the dictionary :"
+for key in ${!dict[@]}
+do
+	percentage=`awk 'BEGIN{printf("%0.2f" ,('${dict[$key]}'*100) / '$limit')}'`
+	echo $percentage
+done
